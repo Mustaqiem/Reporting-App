@@ -29,7 +29,7 @@ class ArticlesTable extends AbstractMigration
     {
         $articles = $this->table('articles');
         $articles->addColumn('title', 'string')
-             ->addColumn('content', 'string')
+             ->addColumn('content', 'text')
              ->addColumn('image', 'string')
              ->addColumn('updated_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP','update' => 'CURRENT_TIMESTAMP'])
              ->addColumn('created_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP'])

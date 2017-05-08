@@ -7,12 +7,12 @@ class ArticleModel extends BaseModel
 	protected $table = 'articles';
 	protected $column = ['title', 'content', 'image', 'deleted'];
 
-	function add(array $data)
+	function add(array $data, $images)
 	{
 		$data = [
 			'title' 	=> 	$data['title'],
 			'content'	=>	$data['content'],
-			'image'		=>	$data['image'],
+			'image'		=>	$images,
 		];
 		$this->createData($data);
 
