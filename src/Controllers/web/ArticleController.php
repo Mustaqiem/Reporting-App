@@ -146,9 +146,9 @@ class ArticleController extends BaseController
 		'image'		=>	'Image',
 		]);
 		if ($this->validator->validate()) {
-			if (!empty($_FILE['image']['name'])) {
+			if (!empty($_FILES['image']['name'])) {
 				$storage = new \Upload\Storage\FileSystem('assets/images');
-				$file = new \Upload\File('images', $storage);
+				$file = new \Upload\File('image', $storage);
 
 		        $file->setName(uniqid());
 

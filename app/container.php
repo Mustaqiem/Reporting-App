@@ -18,11 +18,10 @@ $container['db'] = function (Container $container) {
 
 // Set Validation
 
-$container['validator'] = function (Container $container) {
-	$setting = $container->get('settings')['lang']['default'];
-	$params = $container['request']->getParams();
-
-	return new Valitron\Validator($params, [], $setting);
+$container['validator'] = function ($c) {
+	$setting = $c->get('settings')['lang'];
+	$param = $c['request']->getParams();
+	return new \Valitron\Validator($param, [], $setting['default']);
 };
 
 $container['view'] = function ($container) {
