@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controllers\web;
 use App\Models\Users\UserModel;
@@ -8,7 +8,6 @@ class UserController extends BaseController
     public function listUser($request, $response)
     {
         $user = new UserModel($this->db);
-
         $datauser = $user->getAllUser();
         $data['user'] = $datauser;
         return $this->view->render($response, 'users/list.twig', $data);
@@ -29,7 +28,6 @@ class UserController extends BaseController
             'image/jpg', 'image/jpeg')),
             new \Upload\Validation\Size('5M')
         ));
-
         $data = array(
           'name'       => $image->getNameWithExtension(),
           'extension'  => $image->getExtension(),
@@ -39,7 +37,6 @@ class UserController extends BaseController
           'dimensions' => $image->getDimensions()
         );
         $user = new UserModel($this->db);
-
         $this->validator
             ->rule('required', ['username', 'password', 'name', 'email', 'phone', 'address', 'gender'])
             ->message('{field} must not be empty')
@@ -56,14 +53,12 @@ class UserController extends BaseController
                 'name',
                 'password'
              ], 30);
-
         $this->validator
              ->rule('lengthMin', [
                 'username',
                 'name',
                 'password'
              ], 5);
-
         if ($this->validator->validate()) {
             $image->upload();
             $user->createUser($request->getParams(), $data['name']);
@@ -75,25 +70,25 @@ class UserController extends BaseController
         } else {
             $_SESSION['errors'] = $this->validator->errors();
             $_SESSION['old'] = $request->getParams();
-            
+
             $this->flash->addMessage('info');
             return $response->withRedirect($this->router
                     ->pathFor('user.create'));
         }
     }
+
     public function getUpdateData($request, $response, $args)
     {
         $user = new UserModel($this->db);
         $profile = $user->find('id', $args['id']);
         $data['data'] = $profile;
-
         return $this->view->render($response, 'users/edit.twig',
             $data);
     }
+
     public function postUpdateData($request, $response, $args)
     {
         $user = new UserModel($this->db);
-
         $this->validator
             ->rule('required', ['username', 'name', 'email', 'phone', 'address', 'gender'])
             ->message('{field} must not be empty')
@@ -110,14 +105,12 @@ class UserController extends BaseController
                 'name',
                 'password'
              ], 30);
-
         $this->validator
              ->rule('lengthMin', [
                 'username',
                 'name',
                 'password'
              ], 5);
-
         if ($this->validator->validate()) {
             if (!empty($_FILES['image']['name'])) {
                 $storage = new \Upload\Storage\FileSystem('assets/images');
@@ -145,11 +138,11 @@ class UserController extends BaseController
         } else {
             $_SESSION['old'] = $request->getParams();
             $_SESSION['errors'] = $this->validator->errors();
-            return $response->withRedirect($this->router->pathFor('user.edit.data', ['id' => $args['id']]));            
+            return $response->withRedirect($this->router->pathFor('user.edit.data', ['id' => $args['id']]));
         }
     }
 
-    public function softDelete($request, $response, $args) 
+    public function softDelete($request, $response, $args)
     {
         $user = new UserModel($this->db);
         $sofDelete = $user->softDelete($args['id']);
@@ -170,7 +163,6 @@ class UserController extends BaseController
     public function trashUser($request, $response)
     {
         $user = new UserModel($this->db);
-
         $datauser = $user->trash();
         $data['usertrash'] = $datauser;
         return $this->view->render($response, 'users/trash.twig', $data);

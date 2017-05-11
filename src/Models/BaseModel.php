@@ -10,11 +10,11 @@ abstract class BaseModel
     protected $qb;
 
     public function __construct($db)
-        {
-            $this->db = $db;
-        }
+    {
+        $this->db = $db;
+    }
 
-// Get All
+    // Get All
     public function getAll()
     {
         $qb = $this->db->createQueryBuilder();
@@ -25,7 +25,29 @@ abstract class BaseModel
         return $query->fetchAll();
     }
 
- public function trash()
+    // Trash
+    public function getAllTrash()
+    {
+        $qb = $this->db->createQueryBuilder();
+        $qb->select('*')
+                 ->from($this->table)
+                 ->where('deleted = 1');
+        $query = $qb->execute();
+        return $query->fetchAll();
+    }
+
+    //get In aktif
+    public function getInactive()
+    {
+        $qb = $this->db->createQueryBuilder();
+        $qb->select('*')
+                 ->from($this->table)
+                 ->where('deleted = 1');
+        $query = $qb->execute();
+        return $query->fetchAll();
+    }
+
+    public function trash()
     {
         $qb = $this->db->createQueryBuilder();
         $qb->select('*')
@@ -35,7 +57,7 @@ abstract class BaseModel
         return $query->fetchAll();
     }
 
-// Find
+    // Find
     public function find($column, $value)
     {
         $param = ':'.$column;
@@ -48,7 +70,7 @@ abstract class BaseModel
         return $result->fetch();
     }
 
-// Craete Data
+    // Craete Data
     public function createData(array $data)
     {
         $valuesColumn = [];
@@ -88,16 +110,7 @@ abstract class BaseModel
             ->execute();
      }
 
-     public function restoreData($id)
-    {
-        $qb = $this->db->createQueryBuilder();
-
-        $qb->update($this->table)
-                 ->set('deleted', 0)
-                 ->where('id = ' . $id)
-                 ->execute();
-    }
-
+     // SoftDelete
     public function softDelete($id)
     {
         $qb = $this->db->createQueryBuilder();
@@ -108,18 +121,26 @@ abstract class BaseModel
             ->execute();
     }
 
-    // HardDelete
+    //HardDelete
     public function hardDelete($id)
     {
         $qb = $this->db->createQueryBuilder();
 
         $qb->delete($this->table)
-            ->set('deleted', 1)
             ->where('id = ' . $id)
             ->execute();
     }
+    //restore
+    public function restoreData($id)
+    {
+        $qb = $this->db->createQueryBuilder();
+        $qb->update($this->table)
+                 ->set('deleted', 0)
+                 ->where('id = ' . $id)
+                 ->execute();
+    }
 
-// Paginate
+    // Paginate
     public function paginate($page, $query, $limit)
     {
         $qb = $this->db->createQueryBuilder();

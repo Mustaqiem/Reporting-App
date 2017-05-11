@@ -18,11 +18,10 @@ $container['db'] = function (Container $container) {
 
 // Set Validation
 
-$container['validator'] = function (Container $container) {
-	$setting = $container->get('settings')['lang']['default'];
-	$params = $container['request']->getParams();
-
-	return new Valitron\Validator($params, [], $setting);
+$container['validator'] = function ($c) {
+	$setting = $c->get('settings')['lang'];
+	$param = $c['request']->getParams();
+	return new \Valitron\Validator($param, [], $setting['default']);
 };
 
 $container['view'] = function ($container) {
@@ -32,6 +31,14 @@ $container['view'] = function ($container) {
 	$view->addExtension(new Slim\Views\TwigExtension(
 		$container->router, $container->request->getUri())
 	);
+<<<<<<< HEAD
+=======
+	
+	$view->getEnvironment()->addGlobal('old', @$_SESSION['old']);
+	unset($_SESSION['old']);
+	$view->getEnvironment()->addGlobal('errors', @$_SESSION['errors']);
+	unset($_SESSION['errors']);
+>>>>>>> afri/article-admin
 
 	$view->getEnvironment()->addGlobal('old', @$_SESSION['old']);
 	unset($_SESSION['old']);
@@ -42,6 +49,14 @@ $container['view'] = function ($container) {
 		$view->getEnvironment()->addGlobal('user', $_SESSION['user']);
 	}
 
+<<<<<<< HEAD
+=======
+	if (@$_SESSION['user']) {
+		$view->getEnvironment()->addGlobal('user', $_SESSION['user']);
+	}
+
+
+>>>>>>> afri/article-admin
 	$view->getEnvironment()->addGlobal('flash', $container->flash);
 
 	return $view;

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>{% block title %} {% endblock %}</title>
+		{% include 'auth/partials/headAuth.twig'%}
+	</head>
+	<body>
+		<div class="container" style="padding-top: 10%"></div>
+		{% block content %}{% endblock %}
+	</body>
+</html>
