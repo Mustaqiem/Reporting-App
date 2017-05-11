@@ -20,7 +20,7 @@ environments:
         name: reporting
         user: root
         pass: 'mustaqim'
-        port: 3636
+        port: 3306
         charset: utf8
 
     testing:

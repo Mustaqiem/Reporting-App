@@ -9,7 +9,7 @@ class UserModel extends BaseModel
     protected $table = 'users';
     protected $column = ['id', 'name', 'email', 'username', 'password', 'gender', 'address', 'phone', 'image', 'updated_at', 'created_at', 'is_admin'];
 
-    public function createUser(array $data, $images)
+    public function createUser(array $data, $images = 'avatar.png')
     {
         $data = [
             'name' => $data['name'],
@@ -20,6 +20,20 @@ class UserModel extends BaseModel
             'address' => $data['address'],
             'phone' => $data['phone'],
             'image' => $images,
+        ];
+
+        $this->createData($data);
+        return $this->db->lastInsertId();
+    }
+    public function register(array $data)
+    {
+        $data = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'username' => $data['username'],
+            'password' => password_hash($data['password'], PASSWORD_BCRYPT),
+            'gender' => $data['gender'],
+            'phone' => $data['phone'],
         ];
 
         $this->createData($data);
@@ -50,4 +64,16 @@ class UserModel extends BaseModel
                 $query = $qb->execute();
                 return $query->fetchAll();
         }
+
+    public function checkDuplicate($username, $password)
+    {
+        $checkUsername = $this->find('username', $username);
+        $checkEmail = $this->find('password', $password);
+        if ($checkUsername) {
+            return 1;
+        } elseif ($checkPassword) {
+            return 2;
+        }
+        return false;
+    }
 }
