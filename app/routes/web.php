@@ -17,3 +17,13 @@ $app->get('/user/restore/{id}', 'App\Controllers\web\UserController:restoreData'
 $app->get('/user/edit/{id}', 'App\Controllers\web\UserController:getUpdateData')->setName('user.edit.data');
 $app->post('/user/edit/{id}', 'App\Controllers\web\UserController:postUpdateData')->setName('user.edit.data');
 
+$app->get('/register', 'App\Controllers\web\UserController:getRegister')->setName('register');
+
+$app->post('/register', 'App\Controllers\web\UserController:postRegister');
+
+$app->get('/admin', 'App\Controllers\web\UserController:getLoginAsAdmin')->setName('login.admin');
+
+$app->post('/admin', 'App\Controllers\web\UserController:loginAsAdmin');
+
+$app->get('/', 'App\Controllers\web\UserController:getLogin')->setName('login');
+$app->post('/', 'App\Controllers\web\UserController:loginAsUser');

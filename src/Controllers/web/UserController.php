@@ -23,7 +23,7 @@ class UserController extends BaseController
     {
         $storage = new \Upload\Storage\FileSystem('assets/images');
         $image = new \Upload\File('image',$storage);
-        $image->setName(uniqid());
+        $image->setName(uniqid());  
         $image->addValidations(array(
             new \Upload\Validation\Mimetype(array('image/png', 'image/gif',
             'image/jpg', 'image/jpeg')),
@@ -184,4 +184,127 @@ class UserController extends BaseController
         return $response->withRedirect($this->router
                         ->pathFor('user.trash'));
     }
+
+    public function getRegister($request, $response)
+    {
+        return  $this->view->render($response, 'templates/auth/register.twig');
+    }
+
+    public function postRegister($request, $response)
+    {
+        $user = new UserModel($this->db);
+
+        $this->validator
+            ->rule('required', ['username', 'password', 'name', 'email', 'phone', 'gender'])
+            ->message('{field} must not be empty')
+            ->label('Username', 'password', 'name', 'Password', 'Email', 'Address');
+        $this->validator
+            ->rule('integer', 'id');
+        $this->validator
+            ->rule('email', 'email');
+        $this->validator
+            ->rule('alphaNum', 'username');
+        $this->validator
+             ->rule('lengthMax', [
+                'username',
+                'name',
+                'password'
+             ], 30);
+
+        $this->validator
+             ->rule('lengthMin', [
+                'username',
+                'name',
+                'password'
+             ], 5);
+
+        if ($this->validator->validate()) {
+            $user->register($request->getParams(), $data['name']);
+            $this->flash->addMessage('succes', 'Register Succes, Please Login');
+            return $response->withRedirect($this->router
+                    ->pathFor('register'));
+             return $response->withRedirect($this->router
+                    ->pathFor('register'));
+        } else {
+            $_SESSION['errors'] = $this->validator->errors();
+            $_SESSION['old'] = $request->getParams();
+            
+            $this->flash->addMessage('info');
+            return $response->withRedirect($this->router
+                    ->pathFor('register'));
+        }
+    }
+
+    public function getLoginAsAdmin($request, $response)
+    {
+        return  $this->view->render($response, 'templates/auth/login-admin.twig');
+    }
+
+    public function loginAsAdmin($request, $response)
+    {
+        $user = new UserModel($this->db);
+        $login = $user->find('username', $request->getParam('username'));
+        if (empty($login)) {
+            $this->flash->addMessage('warning', ' Username is not registered');
+            return $response->withRedirect($this->router
+                    ->pathFor('login.admin'));
+        } else {
+            if (password_verify($request->getParam('password'),
+                $login['password'])) {
+                $_SESSION['user'] = $login;
+                if ($_SESSION['user']['is_admin'] == 1) {
+                    $this->flash->addMessage('succes', 'Congratulations you have successfully logged in as admin');
+                    return $response->withRedirect($this->router
+                            ->pathFor('home'));
+                } else {
+                    if (isset($_SESSION['user']['is_admin'])) {
+                        $this->flash->addMessage('error', 'You are not admin');
+                        return $response->withRedirect($this->router
+                                ->pathFor('login.admin'));
+                    }
+                }
+            } else {
+                $this->flash->addMessage('warning', ' Password is not registered');
+                return $response->withRedirect($this->router
+                        ->pathFor('login.admin'));
+            }
+        }
+    }
+
+    public function getLogin($request, $response)
+    {
+        return  $this->view->render($response, 'templates/auth/register.twig');
+    }
+
+    public function loginAsUser($request, $response)
+    {
+        $user = new UserModel($this->db);
+        $login = $user->find('username', $request->getParam('username'));
+        if (empty($login)) {
+            $this->flash->addMessage('warning', ' Username is not registered');
+            return $response->withRedirect($this->router
+                    ->pathFor('login'));
+        } else {
+            if (password_verify($request->getParam('password'),
+                $login['password'])) {
+                $_SESSION['user'] = $login;
+                if ($_SESSION['user']['is_admin'] == 0) {
+                    $this->flash->addMessage('succes', 'Succes Login As User');
+                    return $response->withRedirect($this->router
+                            ->pathFor('home'));
+                } else {
+                    if (isset($_SESSION['user']['is_admin'])) {
+                        $this->flash->addMessage('succes', 'You Are Not User');
+                        return $response->withRedirect($this->router
+                                ->pathFor('login'));
+                    }
+                }
+            } else {
+                $this->flash->addMessage('warning', ' Password is not registered');
+                return $response->withRedirect($this->router
+                        ->pathFor('login'));
+            }
+        }
+    }
+
 }
