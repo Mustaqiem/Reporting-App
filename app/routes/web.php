@@ -34,23 +34,37 @@ $app->group('/admin', function() use ($app, $container) {
         $this->post('/edit/{id}', 'App\Controllers\web\UserController:postUpdateData')->setName('user.edit.data');
     });
 
-    $app->group('/article/', function() use ($app, $container) {
-        $app->get('add', 'App\Controllers\web\ArticleController:getAdd')
+    $app->group('/article/', function() {
+        $this->get('add', 'App\Controllers\web\ArticleController:getAdd')
         ->setName('article-add');
-        $app->post('add', 'App\Controllers\web\ArticleController:add');
-        $app->get('edit/{id}', 'App\Controllers\web\ArticleController:getUpdate')
+        $this->post('add', 'App\Controllers\web\ArticleController:add');
+        $this->get('edit/{id}', 'App\Controllers\web\ArticleController:getUpdate')
         ->setName('article-edit');
-        $app->post('edit/{id}', 'App\Controllers\web\ArticleController:update');
-        $app->get('list/active', 'App\Controllers\web\ArticleController:getActiveArticle')
+        $this->post('edit/{id}', 'App\Controllers\web\ArticleController:update');
+        $this->get('list/active', 'App\Controllers\web\ArticleController:getActiveArticle')
         ->setName('article-list-active');
-        $app->post('list/active', 'App\Controllers\web\ArticleController:setInactive');
-        $app->get('list/in-active', 'App\Controllers\web\ArticleController:getInactiveArticle')
+        $this->post('list/active', 'App\Controllers\web\ArticleController:setInactive');
+        $this->get('list/in-active', 'App\Controllers\web\ArticleController:getInactiveArticle')
         ->setName('article-list-inactive');
-        $app->get('list/in-active/{id}', 'App\Controllers\web\ArticleController:setActive')
+        $this->get('list/in-active/{id}', 'App\Controllers\web\ArticleController:setActive')
         ->setName('article-restore');
-        $app->get('read/{id}', 'App\Controllers\web\ArticleController:readArticle')
+        $this->get('read/{id}', 'App\Controllers\web\ArticleController:readArticle')
         ->setName('article-read');
-        $app->post('delete', 'App\Controllers\web\ArticleController:setDelete')
+        $this->post('delete', 'App\Controllers\web\ArticleController:setDelete')
         ->setName('article-del');
     });
+
+    $app->group('/item', function(){
+        $this->get('', 'App\Controllers\web\ItemController:index')->setName('index');
+        $this->get('/add', 'App\Controllers\web\ItemController:getAdd')->setName('item.add');
+        $this->post('/add', 'App\Controllers\web\ItemController:postAdd')->setName('item.add.post');
+        $this->get('/update/{id}', 'App\Controllers\web\ItemController:getUpdateItem')->setName('item.update');
+        $this->post('/update/{id}', 'App\Controllers\web\ItemController:postUpdateItem')->setName('item.update.post');
+        $this->get('/del/{id}', 'App\Controllers\web\ItemController:hardDeleteItem')->setName('item.delete');
+        $this->get('/softdel/{id}', 'App\Controllers\web\ItemController:softDeleteItem')->setName('item.soft.delete');
+        $this->get('/restore/{id}', 'App\Controllers\web\ItemController:restoreItem')->setName('item.restore');
+        $this->get('/trash', 'App\Controllers\web\ItemController:getTrash')->setName('item.trash');
+
+    });
+
 });

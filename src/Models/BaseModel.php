@@ -47,6 +47,7 @@ abstract class BaseModel
         return $query->fetchAll();
     }
 
+    //Get trash
     public function trash()
     {
         $qb = $this->db->createQueryBuilder();
@@ -89,7 +90,7 @@ abstract class BaseModel
             ->execute();
     }
 
-// Update Data
+    // Update Data
      public function updateData(array $data, $id)
          {
          $valuesColumn = [];
@@ -130,14 +131,16 @@ abstract class BaseModel
             ->where('id = ' . $id)
             ->execute();
     }
-    //restore
+
+    // Restore
     public function restoreData($id)
     {
         $qb = $this->db->createQueryBuilder();
+
         $qb->update($this->table)
-                 ->set('deleted', 0)
-                 ->where('id = ' . $id)
-                 ->execute();
+            ->set('deleted', 0)
+            ->where('id = ' . $id)
+            ->execute();
     }
 
     // Paginate

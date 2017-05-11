@@ -6,6 +6,7 @@ class Item extends BaseModel
 {
     protected $table = 'items';
     protected $column = ['id', 'name'];
+    protected $joinTable = 'groups';
 
     public function create($data)
     {
@@ -41,6 +42,34 @@ class Item extends BaseModel
         $this->updateData($data, $id);
 
         // return $this->db->lastInsertId();
+    }
+
+    public function getAllItem()
+    {
+        $qb = $this->db->createQueryBuilder();
+
+        $qb->select('gr.name as groups', 'it.*')
+           ->from($this->table, 'it')
+           ->join('it', $this->joinTable, 'gr', 'gr.id = it.group_id')
+           ->where('it.deleted = 0');
+
+           $result = $qb->execute();
+
+           return $result->fetchAll();
+    }
+
+    public function getAllDeleted()
+    {
+        $qb = $this->db->createQueryBuilder();
+
+        $qb->select('gr.name as groups', 'it.*')
+           ->from($this->table, 'it')
+           ->join('it', $this->joinTable, 'gr', 'gr.id = it.group_id')
+           ->where('it.deleted = 1');
+
+           $result = $qb->execute();
+
+           return $result->fetchAll();
     }
 
 }
