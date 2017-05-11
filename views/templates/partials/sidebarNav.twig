@@ -64,9 +64,9 @@
                 </span>
             </a>
             <ul class="treeview-menu">
-                <li><a href="#">Item List</a></li>
-                <li><a href="#">Create Item</a></li>
-                <li><a href="#">Trash</a></li>
+                <li><a href="{{ path_for('index')}}">Item List</a></li>
+                <li><a href="{{ path_for('item.add')}}">Create Item</a></li>
+                <li><a href="{{ path_for('item.trash')}}">Trash</a></li>
             </ul>
 
         <li>

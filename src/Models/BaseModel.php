@@ -25,6 +25,7 @@ abstract class BaseModel
         return $query->fetchAll();
     }
 
+
 // Find
     public function find($column, $value)
     {
@@ -84,7 +85,28 @@ abstract class BaseModel
         $qb = $this->db->createQueryBuilder();
 
         $qb->delete($this->table)
+            ->where('id = ' . $id)
+            ->execute();
+    }
+
+// SoftDelete
+    public function softDelete($id)
+    {
+        $qb = $this->db->createQueryBuilder();
+
+        $qb->update($this->table)
             ->set('deleted', 1)
+            ->where('id = ' . $id)
+            ->execute();
+    }
+
+// Restore
+    public function restoreData($id)
+    {
+        $qb = $this->db->createQueryBuilder();
+
+        $qb->update($this->table)
+            ->set('deleted', 0)
             ->where('id = ' . $id)
             ->execute();
     }
