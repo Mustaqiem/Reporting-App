@@ -11,21 +11,21 @@ class ArticleController extends BaseController
 {
 	public function index(Request $request, Response $response)
 	{
-		return $this->view->render($response, 'admin/article-list-active.twig');
+		return $this->view->render($response, 'admin/article/article-list-active.twig');
 	}
 
     public function getActiveArticle($request, $response, $arg)
     {
         $article = new ArticleModel($this->db);
         $data['article'] = $article->getAll();
-        return $this->view->render($response, 'admin/article-list-active.twig', $data);
+        return $this->view->render($response, 'admin/article/article-list-active.twig', $data);
     }
     public function getInactiveArticle($request, $response, $arg)
     {
         $article = new ArticleModel($this->db);
         $article_list = $article->getInactive();
         $data['article'] = $article_list;
-        return $this->view->render($response, 'admin/article-list-inactive.twig',
+        return $this->view->render($response, 'admin/article/article-list-inactive.twig',
         	$data);
     }
     public function setActive($request, $response, $args)
@@ -48,7 +48,7 @@ class ArticleController extends BaseController
 
 	public function getAdd(Request $request, Response $response)
 	{
-		return $this->view->render($response, 'admin/article-add.twig');
+		return $this->view->render($response, 'admin/article/article-add.twig');
 	}
 
 	public function add(Request $request, Response $response)
@@ -116,7 +116,7 @@ class ArticleController extends BaseController
 		$article = new ArticleModel($this->db);
 		$data['article'] = $article->find('id', $args['id']);
 
-		return $this->view->render($response , 'admin/article-read.twig', $data);
+		return $this->view->render($response , 'admin/article/article-read.twig', $data);
 	}
 
 	//Edit article
@@ -125,7 +125,7 @@ class ArticleController extends BaseController
 		$article = new ArticleModel($this->db);
         $data['article'] = $article->find('id', $args['id']);
 
-		return $this->view->render($response, 'admin/article-edit.twig', $data);
+		return $this->view->render($response, 'admin/article/article-edit.twig', $data);
 	}
 	public function update(Request $request, Response $response, $args)
 	{

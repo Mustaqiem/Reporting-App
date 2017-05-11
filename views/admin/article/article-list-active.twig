@@ -1,14 +1,14 @@
 {% extends 'templates/default.twig' %}
 
-{% block title %} RA | Reporting - App {% endblock %}
+{% block title %} Article | List - Active {% endblock %}
 
 {% block headContent %} 
-	Active Article <i style="color:green" class="fa fa-check-square-o"></i>
+	<i class="fa fa-list" aria-hidden="true"></i> Active Article 
 {% endblock %}
 
 {% block content %}
 
-<a href="{{ path_for('article-add') }}" class="btn btn-primary">Tambah</a>
+<a href="{{ path_for('article-add') }}" class="btn btn-primary"><i class="fa fa-plus" aria-hidden="true"></i> Tambah</a>
 
 <div class="row">
 	<div class="col-xs-12">
@@ -19,19 +19,19 @@
 						<thead>
 							<tr>
 								<th style="width: 40px">Delete</th>
+								<th>Image</th>
 								<th>Title</th>
 								<th>Content</th>
-								<th>Image</th>
 								<th style="width: 40px">Edit</th>
 							</tr>
 						</thead>
 						{% for article in article %}
 						<tr>
 						    <td class="text-center"><input type="checkbox" name="inactive[]" value="{{ article.id }}"></td>
+						    <td><img src="{{ base_url() }}/assets/images/{{ article.image }}" width="100" height="100"></td>
 							<td><a href="{{ path_for('article-read', { id:article.id }) }}">{{ article.title }}</a></td>
 							<td>{{ article.content|slice(0, 200) }}</td>
-							<td><img src="{{ base_url() }}/assets/images/{{ article.image }}" width="100" height="100"></td>
-							<td class="text-center"><a href="{{ path_for('article-edit', { id:article.id }) }}"><i class="fa fa-pencil"></i></a></td>
+							<td class="text-center"><a href="{{ path_for('article-edit', { id:article.id }) }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
 						</tr>
 						{% endfor %}
 					</table>

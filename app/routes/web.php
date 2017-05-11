@@ -1,6 +1,8 @@
 <?php
 
 $app->get('/home', 'App\Controllers\web\HomeController:index')->setName('home');
+$app->get('/login', 'App\Controllers\web\UserController:getLogin')->setName('user.login');
+$app->post('/login', 'App\Controllers\web\UserController:login');
 
 $app->group('/article/', function() use ($app, $container) { 
 	$app->get('add', 'App\Controllers\web\ArticleController:getAdd')
