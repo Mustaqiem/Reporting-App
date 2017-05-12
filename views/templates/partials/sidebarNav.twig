@@ -17,6 +17,8 @@
             <a href="{{path_for('home')}}"><i class="fa ion-ios-speedometer fa-lg"></i>
             <span>HOME</span></a>
         </li class="treeview">
+
+        {% if login.is_admin == 1 %}
         <li class="treeview">
             <a href="#"><i class="fa fa-users"></i>
                 <span>GROUP</span>
@@ -68,13 +70,32 @@
                 <li><a href="{{ path_for('item.add')}}">Create Item</a></li>
                 <li><a href="{{ path_for('item.trash')}}">Trash</a></li>
             </ul>
+            {% endif %}
+
+        {% if login.is_admin == 0 %}
+
+        <li class="treeview">
+            <a href="#"><i class="fa fa-users"></i>
+                <span>GROUP</span>
+                <span class="pull-right-container">
+                  <i class="fa fa-angle-left pull-right"></i>
+                </span>
+            </a>
+            <ul class="treeview-menu">
+                {% for user_group in user_group %}
+                <li><a href="{{ base_url() }}user/group/{{ user_group.id }}">{{user_group.name}}</a></li>
+                {% endfor %}
+            </ul>
+        </li>
+
+        {% endif %}
 
         <li>
          <a href="#"><i class="fa fa-power-off"></i>
             <span>LOGOUT</span></a>
         </li>
 
-        </ul>
+    </ul>
     </li>
 </ul>
 

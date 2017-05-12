@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Controllers\web;
 use App\Models\Users\UserModel;
-
 class UserController extends BaseController
 {
     public function listUser($request, $response)
@@ -12,17 +10,15 @@ class UserController extends BaseController
         $data['user'] = $datauser;
         return $this->view->render($response, 'users/list.twig', $data);
     }
-
     public function getCreateUser($request, $response)
     {
         return  $this->view->render($response, 'users/add.twig');
     }
-
     public function postCreateUser($request, $response)
     {
         $storage = new \Upload\Storage\FileSystem('assets/images');
         $image = new \Upload\File('image',$storage);
-        $image->setName(uniqid());  
+        $image->setName(uniqid());
         $image->addValidations(array(
             new \Upload\Validation\Mimetype(array('image/png', 'image/gif',
             'image/jpg', 'image/jpeg')),
@@ -70,13 +66,11 @@ class UserController extends BaseController
         } else {
             $_SESSION['errors'] = $this->validator->errors();
             $_SESSION['old'] = $request->getParams();
-
             $this->flash->addMessage('info');
             return $response->withRedirect($this->router
                     ->pathFor('user.create'));
         }
     }
-
     public function getUpdateData($request, $response, $args)
     {
         $user = new UserModel($this->db);
@@ -85,7 +79,6 @@ class UserController extends BaseController
         return $this->view->render($response, 'users/edit.twig',
             $data);
     }
-
     public function postUpdateData($request, $response, $args)
     {
         $user = new UserModel($this->db);
@@ -141,7 +134,6 @@ class UserController extends BaseController
             return $response->withRedirect($this->router->pathFor('user.edit.data', ['id' => $args['id']]));
         }
     }
-
     public function softDelete($request, $response, $args)
     {
         $user = new UserModel($this->db);
@@ -150,7 +142,6 @@ class UserController extends BaseController
         return $response->withRedirect($this->router
                         ->pathFor('user.list.all'));
     }
-
     public function hardDelete($request, $response, $args)
     {
         $user = new UserModel($this->db);
@@ -159,7 +150,6 @@ class UserController extends BaseController
         return $response->withRedirect($this->router
                         ->pathFor('user.trash'));
     }
-
     public function trashUser($request, $response)
     {
         $user = new UserModel($this->db);
@@ -167,7 +157,6 @@ class UserController extends BaseController
         $data['usertrash'] = $datauser;
         return $this->view->render($response, 'users/trash.twig', $data);
     }
-
     public function restoreData($request, $response, $args)
     {
         $user = new UserModel($this->db);
@@ -176,16 +165,13 @@ class UserController extends BaseController
         return $response->withRedirect($this->router
                         ->pathFor('user.trash'));
     }
-
     public function getRegister($request, $response)
     {
         return  $this->view->render($response, 'templates/auth/register.twig');
     }
-
     public function postRegister($request, $response)
     {
         $user = new UserModel($this->db);
-
         $this->validator
             ->rule('required', ['username', 'password', 'name', 'email', 'phone', 'gender'])
             ->message('{field} must not be empty')
@@ -202,14 +188,12 @@ class UserController extends BaseController
                 'name',
                 'password'
              ], 30);
-
         $this->validator
              ->rule('lengthMin', [
                 'username',
                 'name',
                 'password'
              ], 5);
-
         if ($this->validator->validate()) {
             $user->register($request->getParams(), $data['name']);
             $this->flash->addMessage('succes', 'Register Succes, Please Login');
@@ -220,18 +204,16 @@ class UserController extends BaseController
         } else {
             $_SESSION['errors'] = $this->validator->errors();
             $_SESSION['old'] = $request->getParams();
-            
+
             $this->flash->addMessage('info');
             return $response->withRedirect($this->router
                     ->pathFor('register'));
         }
     }
-
     public function getLoginAsAdmin($request, $response)
     {
         return  $this->view->render($response, 'templates/auth/login-admin.twig');
     }
-
     public function loginAsAdmin($request, $response)
     {
         $user = new UserModel($this->db);
@@ -243,13 +225,13 @@ class UserController extends BaseController
         } else {
             if (password_verify($request->getParam('password'),
                 $login['password'])) {
-                $_SESSION['user'] = $login;
-                if ($_SESSION['user']['is_admin'] == 1) {
+                $_SESSION['login'] = $login;
+                if ($_SESSION['login']['is_admin'] == 1) {
                     $this->flash->addMessage('succes', 'Congratulations you have successfully logged in as admin');
                     return $response->withRedirect($this->router
                             ->pathFor('home'));
                 } else {
-                    if (isset($_SESSION['user']['is_admin'])) {
+                    if (isset($_SESSION['login']['is_admin'])) {
                         $this->flash->addMessage('error', 'You are not admin');
                         return $response->withRedirect($this->router
                                 ->pathFor('login.admin'));
@@ -262,16 +244,18 @@ class UserController extends BaseController
             }
         }
     }
-
     public function getLogin($request, $response)
     {
         return  $this->view->render($response, 'templates/auth/register.twig');
     }
-
     public function loginAsUser($request, $response)
     {
         $user = new UserModel($this->db);
+        $userGroup = new \App\Models\UserGroupModel($this->db);
+
         $login = $user->find('username', $request->getParam('username'));
+        $groups = $userGroup->findAllGroup($login['id']);
+
         if (empty($login)) {
             $this->flash->addMessage('warning', ' Username is not registered');
             return $response->withRedirect($this->router
@@ -279,13 +263,15 @@ class UserController extends BaseController
         } else {
             if (password_verify($request->getParam('password'),
                 $login['password'])) {
-                $_SESSION['user'] = $login;
-                if ($_SESSION['user']['is_admin'] == 0) {
+                $_SESSION['login'] = $login;
+                $_SESSION['user_group'] = $groups;
+
+                if ($_SESSION['login']['is_admin'] == 0) {
                     $this->flash->addMessage('succes', 'Succes Login As User');
                     return $response->withRedirect($this->router
                             ->pathFor('home'));
                 } else {
-                    if (isset($_SESSION['user']['is_admin'])) {
+                    if (isset($_SESSION['login']['is_admin'])) {
                         $this->flash->addMessage('succes', 'You Are Not User');
                         return $response->withRedirect($this->router
                                 ->pathFor('login'));
@@ -298,5 +284,4 @@ class UserController extends BaseController
             }
         }
     }
-
 }

@@ -129,6 +129,22 @@ class UserGroupModel extends BaseModel
 		$result = $qb->execute();
 		return $result->fetchAll();
 	}
+
+	// Get all groups by user id
+	public function findAllGroup($userId)
+	{
+		$qb = $this->db->createQueryBuilder();
+
+		$qb->select('groups.*', 'user_group.*')
+			 ->from('groups', 'groups')
+			 ->join('groups', $this->table, 'user_group', 'groups.id = user_group.group_id')
+			 ->where('user_group.user_id = :id')
+			 ->setParameter(':id', $userId);
+
+			 $result = $qb->execute();
+ 			return $result->fetchAll();
+	}
+
 }
 
 ?>

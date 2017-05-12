@@ -36,8 +36,12 @@ $container['view'] = function ($container) {
 	$view->getEnvironment()->addGlobal('errors', @$_SESSION['errors']);
 	unset($_SESSION['errors']);
 
-	if (@$_SESSION['user']) {
-		$view->getEnvironment()->addGlobal('user', $_SESSION['user']);
+	if (@$_SESSION['login']) {
+		$view->getEnvironment()->addGlobal('login', $_SESSION['login']);
+	}
+
+	if (@$_SESSION['user_group']) {
+		$view->getEnvironment()->addGlobal('user_group', $_SESSION['user_group']);
 	}
 
 	$view->getEnvironment()->addGlobal('flash', $container->flash);
