@@ -1,7 +1,7 @@
 <?php
 
 $app->group('/api', function() use ($app, $container) {
-    $app->get('/', 'App\Controllers\api\HomeController:index')->setName('home');
+    $app->get('/', 'App\Controllers\api\HomeController:index');
     $app->post('/login', 'App\Controllers\api\UserController:login')->setname('user.login');
     $app->post('/register', 'App\Controllers\api\UserController:createUser')->setname('user.login');
 
