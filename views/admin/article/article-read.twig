@@ -2,15 +2,15 @@
 
 {% block title %} Article | Read {% endblock %}
 
-{% block headContent %} 
-<i class="fa fa-eye" aria-hidden="true"></i> Article - Read 
+{% block headContent %}
+<i class="fa fa-eye" aria-hidden="true"></i> Article - Read
 {% endblock %}
 
 {% block content %}
 <div class="container">
 <div class="col-md-8 col-md-offset-1">
 	<div class="card">
-	  <img class="card-img-top" src="{{ base_url() }}/assets/images/{{ article.image }}" width="200" height="200"  alt="Lights" style="width:100%" alt="Card image cap">
+	  <center><img class="card-img-top" src="{{ base_url() }}/assets/images/{{ article.image }}"  height="200"  alt="Lights" ></center>
 	  <div class="card-block">
 	    <h4 class="media-heading"> {{ article.title }} </h4>
 		<p class="fa fa-calendar"> {{ article.created_at|date('d/m/Y') }} </p>

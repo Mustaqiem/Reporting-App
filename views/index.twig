@@ -2,10 +2,26 @@
 
 {% block title %} Reporting App {% endblock %}
 
-{% block headContent %} Admin Panel {% endblock %}
+{% block headContent %}
 
-{% block content %} 
-
+{% if login.is_admin == 1 %}
+Admin Panel
+{% elseif login.is_admin == 0 %}
+User Timeline
+{% endif %}
 
 {% endblock %}
-    
+
+{% block content %}
+
+{% if login.is_admin == 1 %}
+
+{% include 'dashboard/dashboard.twig' %}
+
+{% elseif login.is_admin == 0 %}
+
+{% include 'admin/article/user-articles.twig' %}
+
+{% endif %}
+
+{% endblock %}
