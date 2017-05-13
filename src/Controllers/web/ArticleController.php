@@ -9,11 +9,6 @@ use App\Models\ArticleModel;
 
 class ArticleController extends BaseController
 {
-	public function index(Request $request, Response $response)
-	{
-		return $this->view->render($response, 'admin/article/article-list-active.twig');
-	}
-
     public function getActiveArticle($request, $response, $arg)
     {
         $article = new ArticleModel($this->db);
@@ -182,7 +177,7 @@ class ArticleController extends BaseController
 			$_SESSION['old'] = $request->getParams();
 			$_SESSION['errors'] = $this->validator->errors();
 
-			return $response->withRedirect($this->router->pathFor('article-edit', ['id' => $args['id']]));			
+			return $response->withRedirect($this->router->pathFor('article-edit', ['id' => $args['id']]));
 		}
 	}
 
