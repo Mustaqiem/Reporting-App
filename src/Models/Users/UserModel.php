@@ -55,25 +55,40 @@ class UserModel extends BaseModel
         $this->updateData($data, $id);        
     }
 
+    public function updateUser(array $data, $id)
+    {
+        $data = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'username' => $data['username'],
+            'password' => password_hash($data['password'], PASSWORD_BCRYPT),
+            'gender' => $data['gender'],
+            'address' => $data['address'],
+            'phone' => $data['phone'],
+        ];
+        $this->updateData($data, $id);        
+    }
+
     public function getAllUser()
         {
             $qb = $this->db->createQueryBuilder();
                 $qb->select('*')
-                                 ->from($this->table)
-                                 ->where('is_admin = 0 && deleted = 0');
+                         ->from($this->table)
+                         ->where('is_admin = 0 && deleted = 0');
                 $query = $qb->execute();
                 return $query->fetchAll();
         }
 
-    public function checkDuplicate($username, $password)
+    public function checkDuplicate($username, $email)
     {
         $checkUsername = $this->find('username', $username);
-        $checkEmail = $this->find('password', $password);
+        $checkEmail = $this->find('email', $email);
         if ($checkUsername) {
             return 1;
-        } elseif ($checkPassword) {
+        } elseif ($checkEmail) {
             return 2;
         }
         return false;
     }
+ 
 }
