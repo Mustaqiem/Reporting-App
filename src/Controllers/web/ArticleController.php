@@ -11,7 +11,9 @@ class ArticleController extends BaseController
 {
 	public function index(Request $request, Response $response)
 	{
-		return $this->view->render($response, 'admin/article/article-list-active.twig');
+        $article = new ArticleModel($this->db);
+        $data['article'] = $article->getAll();
+        return $this->view->render($response, 'admin/article/timeline.twig', $data);
 	}
 
     public function getActiveArticle($request, $response, $arg)

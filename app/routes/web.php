@@ -1,6 +1,6 @@
 <?php
 
-$app->get('/home', 'App\Controllers\web\HomeController:index')->setName('home');
+$app->get('/home', 'App\Controllers\web\ArticleController:index')->setName('home');
 $app->get('/login', 'App\Controllers\web\UserController:getLogin')->setName('user.login');
 $app->post('/login', 'App\Controllers\web\UserController:login');
 $app->get('/register', 'App\Controllers\web\UserController:getRegister')->setName('register');
