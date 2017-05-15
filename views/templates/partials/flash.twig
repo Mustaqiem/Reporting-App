@@ -20,7 +20,7 @@
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	  <strong><span class="glyphicon glyphicon-remove"></span>
 		{{ flash.getMessage('error') | first }}
-		<span class="glyphicon glyphicon-remove"></span>
+		<span class="glyphicon glyphicon-remove"></span></strong>
 	  </strong> 
 	</div>
 	</center>
@@ -38,7 +38,7 @@
 
 {% if flash.getMessage('succes') %}
 
-	<center><div class="alert alert-success alert-dismissible" role="alert">
+	<div class="alert alert-success alert-dismissible" role="alert">
 	  <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 	  <strong><span class="glyphicon glyphicon-check"></span></strong>
 		{{ flash.getMessage('succes') | first }} 

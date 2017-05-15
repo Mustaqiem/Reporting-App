@@ -116,7 +116,7 @@
                         <div class="input-group-addon">
                             <i class="fa fa-image"></i>
                         </div>
-                        <input type="file" class="form-control" name="image" value="{{ old.image }}" id="file" placeholder="Your image">
+                        <input type="file" id="file" name="image" id="image" class="form-control">
                     </div>
                     {% if errors.image %}
                         <span class="help-block">{{errors.image | first}}</span>
