@@ -83,7 +83,7 @@
             </a>
             <ul class="treeview-menu">
                 {% for user_group in user_group %}
-                <li><a href="{{ base_url() }}user/group/{{ user_group.id }}">{{user_group.name}}</a></li>
+                <li><a href="{{ path_for('user.item.group', {('id'): user_group.group_id }) }}">{{user_group.name}}</a></li>
                 {% endfor %}
             </ul>
         </li>

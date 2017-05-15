@@ -284,4 +284,40 @@ class UserController extends BaseController
             }
         }
     }
+
+    public function getUserItemInGroup($request,$response, $args)
+    {
+        $item = new \App\Models\Item($this->db);
+        $userItem = new \App\Models\UserItem($this->db);
+        $userId  = $_SESSION['login']['id'];
+        $findUserItem['items'] = $userItem->getItemInGroup($args['id'], $userId);
+        $findUserItem['itemdone'] = $userItem->getDoneItemInGroup($args['id'], $userId);
+
+        return $this->view->render($response, 'users/useritem.twig', $findUserItem);
+
+    }
+
+    public function setItemUserStatus($request, $response, $args)
+    {
+        $userItem = new \App\Models\UserItem($this->db);
+
+
+        $setItem = $userItem->setStatusItems($args['id']);
+        $findGroup = $userItem->find('id', $args['id']);
+        $groupId = $findGroup['group_id'];
+
+        return $response->withRedirect($this->router->pathFor('user.item.group', ['id' =>$groupId]));
+    }
+
+    public function restoreItemUserStatus($request, $response, $args)
+    {
+        $userItem = new \App\Models\UserItem($this->db);
+
+
+        $setItem = $userItem->resetStatusItems($args['id']);
+        $findGroup = $userItem->find('id', $args['id']);
+        $groupId = $findGroup['group_id'];
+
+        return $response->withRedirect($this->router->pathFor('user.item.group', ['id' =>$groupId]));
+    }
 }

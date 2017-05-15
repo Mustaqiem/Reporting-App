@@ -2,6 +2,6 @@
 /app/setting.php
 /mysql_directory
 docker-compose.yml
+phinx.yml
 composer.lock
 Dockerfile
-phinx.yml

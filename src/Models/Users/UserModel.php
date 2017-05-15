@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Models\Users;
 
@@ -52,7 +52,7 @@ class UserModel extends BaseModel
             'phone' => $data['phone'],
             'image' => $images,
         ];
-        $this->updateData($data, $id);        
+        $this->updateData($data, $id);
     }
 
     public function getAllUser()
