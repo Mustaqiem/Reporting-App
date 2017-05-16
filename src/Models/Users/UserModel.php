@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Models\Users;
 
@@ -25,6 +25,7 @@ class UserModel extends BaseModel
         $this->createData($data);
         return $this->db->lastInsertId();
     }
+
     public function register(array $data)
     {
         $data = [
@@ -52,7 +53,7 @@ class UserModel extends BaseModel
             'phone' => $data['phone'],
             'image' => $images,
         ];
-        $this->updateData($data, $id);        
+        $this->updateData($data, $id);
     }
 
     public function updateUser(array $data, $id)
@@ -66,7 +67,7 @@ class UserModel extends BaseModel
             'address' => $data['address'],
             'phone' => $data['phone'],
         ];
-        $this->updateData($data, $id);        
+        $this->updateData($data, $id);
     }
 
     public function getAllUser()
@@ -90,5 +91,5 @@ class UserModel extends BaseModel
         }
         return false;
     }
- 
+
 }
