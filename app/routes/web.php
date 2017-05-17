@@ -87,7 +87,7 @@ $app->group('/admin', function() use ($app, $container) {
 });
 
 $app->group('/user', function(){
-    $this->get('/group/{id}/item', 'App\Controllers\web\UserController:getUserItemInGroup')->setName('user.item.group');
+    $this->get('/group/{id}/item', 'App\Controllers\web\UserController:enterGroup')->setName('user.item.group');
     $this->get('/item/status/{id}', 'App\Controllers\web\UserController:setItemUserStatus')->setName('user.item.status');
     $this->get('/item/reset/{id}', 'App\Controllers\web\UserController:restoreItemUserStatus')->setName('user.item.reset.status');
 });
