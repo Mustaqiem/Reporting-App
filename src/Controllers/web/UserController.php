@@ -22,7 +22,7 @@ class UserController extends BaseController
     {
         $storage = new \Upload\Storage\FileSystem('assets/images');
         $image = new \Upload\File('image',$storage);
-        $image->setName(uniqid());  
+        $image->setName(uniqid());
         $image->addValidations(array(
             new \Upload\Validation\Mimetype(array('image/png', 'image/gif',
             'image/jpg', 'image/jpeg')),
@@ -65,11 +65,11 @@ class UserController extends BaseController
 
             if ($register == 1) {
                 $_SESSION['old'] = $request->getParams();
-                $this->flash->addMessage('warning', 'Username, already used'); 
+                $this->flash->addMessage('warning', 'Username, already used');
                     return $response->withRedirect($this->router->pathFor('user.create'));
             } elseif ($register == 2) {
                 $_SESSION['old'] = $request->getParams();
-                $this->flash->addMessage('warning', 'Email, already used'); 
+                $this->flash->addMessage('warning', 'Email, already used');
                 return $response->withRedirect($this->router->pathFor('user.create'));
             } else {
                 $user->createUser($request->getParams(), $data['name']);
@@ -223,11 +223,11 @@ class UserController extends BaseController
 
             if ($register == 1) {
                 $_SESSION['old'] = $request->getParams();
-                $this->flash->addMessage('warning', 'Username, already used'); 
+                $this->flash->addMessage('warning', 'Username, already used');
                     return $response->withRedirect($this->router->pathFor('register'));
             } elseif ($register == 2) {
                 $_SESSION['old'] = $request->getParams();
-                $this->flash->addMessage('warning', 'Email, already used'); 
+                $this->flash->addMessage('warning', 'Email, already used');
                 return $response->withRedirect($this->router->pathFor('register'));
             } else {
                 $registers = $request->getParams();
@@ -241,7 +241,7 @@ class UserController extends BaseController
         } else {
             $_SESSION['errors'] = $this->validator->errors();
             $_SESSION['old'] = $request->getParams();
-            
+
             $this->flash->addMessage('info');
             return $response->withRedirect($this->router
                     ->pathFor('register'));
@@ -293,6 +293,9 @@ class UserController extends BaseController
     {
         $user = new UserModel($this->db);
         $login = $user->find('username', $request->getParam('username'));
+        $group =  new \App\Models\UserGroupModel($this->db);
+        $groups = $group->findAllGroup($login['id']);
+
         if (empty($login)) {
             $this->flash->addMessage('warning', ' Username is not registered');
             return $response->withRedirect($this->router
@@ -301,6 +304,8 @@ class UserController extends BaseController
             if (password_verify($request->getParam('password'),
                 $login['password'])) {
                 $_SESSION['login'] = $login;
+                $_SESSION['user_group'] = $groups;
+
                 if ($_SESSION['login']['is_admin'] == 0) {
                     $this->flash->addMessage('succes', 'Succes Login As User');
                     return $response->withRedirect($this->router
@@ -319,20 +324,22 @@ class UserController extends BaseController
             }
         }
     }
+
     public function logout($request, $response)
     {
-        unset($_SESSION['login']);
+        session_destroy();
+        // unset($_SESSION['login']);
         return $response->withRedirect($this->router->pathFor('register'));
     }
 
     public function viewProfile($request, $response)
     {
-        return  $this->view->render($response, '/users/profile.twig');  
+        return  $this->view->render($response, '/users/profile.twig');
     }
 
     public function getSettingAccount($request, $response)
     {
-        return  $this->view->render($response, '/users/setting.twig');  
+        return  $this->view->render($response, '/users/setting.twig');
     }
 
     public function settingAccount($request, $response, $args)
@@ -391,4 +398,48 @@ class UserController extends BaseController
         }
     }
 
+    public function getUserItemInGroup($request,$response, $args)
+    {
+        $item = new \App\Models\Item($this->db);
+        $userItem = new \App\Models\UserItem($this->db);
+        $userId  = $_SESSION['login']['id'];
+        $findUserItem['items'] = $userItem->getItemInGroup($args['id'], $userId);
+        $findUserItem['itemdone'] = $userItem->getDoneItemInGroup($args['id'], $userId);
+$count = count($findUserItem['itemdone']);
+
+$reported = $request->getQueryParam('reported');
+
+        return $this->view->render($response, 'users/useritem.twig', [
+            'items' => $findUserItem['items'],
+            'itemdone' => $findUserItem['itemdone'],
+			'group_id' => $args['id'],
+            'reported'=> $reported,
+			'count'=> $count,
+        ]);
+
+    }
+
+    public function setItemUserStatus($request, $response, $args)
+    {
+        $userItem = new \App\Models\UserItem($this->db);
+
+
+        $setItem = $userItem->setStatusItems($args['id']);
+        $findGroup = $userItem->find('id', $args['id']);
+        $groupId = $findGroup['group_id'];
+
+        return $response->withRedirect($this->router->pathFor('user.item.group', ['id' =>$groupId]));
+    }
+
+    public function restoreItemUserStatus($request, $response, $args)
+    {
+        $userItem = new \App\Models\UserItem($this->db);
+
+
+        $setItem = $userItem->resetStatusItems($args['id']);
+        $findGroup = $userItem->find('id', $args['id']);
+        $groupId = $findGroup['group_id'];
+
+        return $response->withRedirect($this->router->pathFor('user.item.group', ['id' =>$groupId]));
+    }
 }
