@@ -342,13 +342,13 @@ class UserController extends BaseController
         return  $this->view->render($response, '/users/setting.twig');
     }
 
-    public function settingAccount($request, $response, $args)
+    public function settingAccount($request, $response)
     {
         $user = new UserModel($this->db);
         $this->validator
             ->rule('required', ['username', 'name', 'email', 'phone', 'address', 'gender'])
-            ->message('{field} must not be empty')
-            ->label('Username', 'name', 'Password', 'Email', 'Address');
+            ->message('{field} must not be empty');
+            // ->label('Username', 'Name', 'Password', 'Email', 'Address');
         $this->validator
             ->rule('integer', 'id');
         $this->validator
@@ -367,6 +367,7 @@ class UserController extends BaseController
                 'name',
                 'password'
              ], 5);
+
         if ($this->validator->validate()) {
             if (!empty($_FILES['image']['name'])) {
                 $storage = new \Upload\Storage\FileSystem('assets/images');
@@ -386,37 +387,81 @@ class UserController extends BaseController
                     'dimensions' => $image->getDimensions()
                 );
                 $image->upload();
-                $user->update($request->getParams(), $data['name'], $args['id']);
+                $user->update($request->getParams(), $data['name'],$request->getParams()['id']);
             } else {
-                $user->updateUser($request->getParams(), $args['id']);
+                $user->updateUser($request->getParams(), $request->getParams()['id']);
             }
+
+            $login = $user->find('id', $request->getParams()['id']);
+            $_SESSION['login'] = $login;
+
             return $response->withRedirect($this->router->pathFor('user.setting'));
         } else {
+            var_dump($request->getParams());die();
+
             $_SESSION['old'] = $request->getParams();
             $_SESSION['errors'] = $this->validator->errors();
             return $response->withRedirect($this->router->pathFor('user.setting', ['id' => $args['id']]));
         }
     }
 
-    public function getUserItemInGroup($request,$response, $args)
+    public function enterGroup($request,$response, $args)
     {
         $item = new \App\Models\Item($this->db);
         $userItem = new \App\Models\UserItem($this->db);
+        $userGroup = new \App\Models\UserGroupModel($this->db);
+
         $userId  = $_SESSION['login']['id'];
+        $user = $userGroup->findUser('group_id', $args['id'], 'user_id', $userId);
+        if ($user['status'] == 1) {
+
+            $group = new \App\Models\GroupModel($this->db);
+    		$userGroup = new \App\Models\UserGroupModel($this->db);
+
+    		$findGroup = $group->find('id', $args['id']);
+    		$finduserGroup = $userGroup->findUsers('group_id', $args['id']);
+    		$countUser = count($finduserGroup);
+
+    		return $this->view->render($response, 'admin/group/detail.twig', [
+    			'group' => $findGroup,
+    			'counts'=> [
+    				'user' => $countUser,
+    			]
+    		]);
+        } elseif ($user['status'] == 0) {
+            return $this->getItemInGroup($request,$response, $args);
+
+        } elseif ($user['status'] == 2) {
+            return $this->getItemInGroup($request,$response, $args);
+        }
+
+    }
+
+    public function getItemInGroup($request,$response, $args)
+    {
+        $item = new \App\Models\Item($this->db);
+        $userItem = new \App\Models\UserItem($this->db);
+        $userGroup = new \App\Models\UserGroupModel($this->db);
+
+        $userId  = $_SESSION['login']['id'];
+        $user = $userGroup->findUser('group_id', $args['id'], 'user_id', $userId);
+
         $findUserItem['items'] = $userItem->getItemInGroup($args['id'], $userId);
         $findUserItem['itemdone'] = $userItem->getDoneItemInGroup($args['id'], $userId);
-$count = count($findUserItem['itemdone']);
 
-$reported = $request->getQueryParam('reported');
+        $count = count($findUserItem['itemdone']);
+        $reported = $request->getQueryParam('reported');
 
-        return $this->view->render($response, 'users/useritem.twig', [
-            'items' => $findUserItem['items'],
+        $data = $this->view->render($response, 'users/useritem.twig', [
             'itemdone' => $findUserItem['itemdone'],
-			'group_id' => $args['id'],
+            'items' => $findUserItem['items'],
+            'status'=> $user['status'],
+            'group_id' => $args['id'],
             'reported'=> $reported,
-			'count'=> $count,
+            'count'=> $count,
         ]);
 
+        return $data;
     }
 
     public function setItemUserStatus($request, $response, $args)
@@ -434,7 +479,6 @@ $reported = $request->getQueryParam('reported');
     public function restoreItemUserStatus($request, $response, $args)
     {
         $userItem = new \App\Models\UserItem($this->db);
-
 
         $setItem = $userItem->resetStatusItems($args['id']);
         $findGroup = $userItem->find('id', $args['id']);
