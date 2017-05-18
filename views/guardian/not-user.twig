@@ -3,7 +3,7 @@
 {% block title %} Group | All Members {% endblock %}
 
 {% block headContent %}
-	 <i style="color:green" class="fa fa-check-square-o">All Members </i>
+	 <i style="color:green" class="fa fa-check-square-o">All Users </i>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
 	<div class="col-xs-12">
 		<div class="panel panel-default">
 			<div class="panel-body">
-				<form action="{{ path_for('member.group.set') }}" method="POST">
+				<form action="{{ path_for('post.user.add') }}" method="POST">
 					<table id="example2" class="table table-bordered table-striped table-hover">
 						<thead>
 							<tr>
@@ -32,16 +32,19 @@
 							<td>{{ user.address }}</td>
 							<td>{{ user.email }}</td>
 							<td>{{ user.phone }}</td>
-							<td><img src="{{ base_url() }}/assets/images/{{ user.image }}" width="100" height="100"></td>
-							<td class="text-center"><input type="checkbox" name="user[]" value="{{ user.id }}"></td>
+							<td><img src="{{ base_url() }}/assets/images/
+							{{ user.image }}" width="100" height="100"></td>
+							<td class="text-center"><input type="checkbox"
+								name="user[]" value="{{ user.id }}"></td>
 						</tr>
 						{% endfor %}
 					</table>
 					<hr style="margin-top:10px;margin-bottom:10px;" >
 				</div>
 				<div class="panel-body" align="right">
-					<input type="hidden" name="group_id" value="{{ group_id }}">
-					<button type="submit" name="member" value="1" class="btn btn-primary"><i class="fa fa-user-plus fa-lg" aria-hidden="true"></i> Set as Member </button>
+					<input type="hidden" name="guard_id" value="{{ guard_id }}">
+					<button type="submit" name="setuser" value="1" class="btn btn-primary">
+						<i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>Add User</button>
 					<hr style="margin-top:10px;margin-bottom:10px;" >
 				</form>
 			</div>

@@ -72,15 +72,12 @@ class UserItem extends BaseModel
         ->andWhere('ui.group_id = :group_id')
         ->setParameters($parameters);
 
-        // $result = $qb->execute();
-
         return $this;
     }
 
     public function getItem($id)
     {
         $qb = $this->db->createQueryBuilder();
-
 
         $this->query = $qb->select('it.name', 'it.description', 'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
         ->from($this->jointTable, 'it')

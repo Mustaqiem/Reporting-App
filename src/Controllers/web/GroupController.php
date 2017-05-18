@@ -302,7 +302,6 @@ class GroupController extends BaseController
 
 		$groupId = $request->getParams()['group_id'];
 
-
 		if (!empty($request->getParams()['member'])) {
 			foreach ($request->getParam('user') as $key => $value) {
 
