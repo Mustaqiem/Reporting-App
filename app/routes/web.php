@@ -89,9 +89,10 @@ $app->group('/user', function(){
     $this->get('/group/{id}/item', 'App\Controllers\web\UserController:enterGroup')->setName('user.item.group');
     $this->get('/item/status/{id}', 'App\Controllers\web\UserController:setItemUserStatus')->setName('user.item.status');
     $this->get('/item/reset/{id}', 'App\Controllers\web\UserController:restoreItemUserStatus')->setName('user.item.reset.status');
-
     $this->get('/change/password', 'App\Controllers\web\UserController:getChangePassword')->setName('user.change.password');
     $this->post('/change/password', 'App\Controllers\web\UserController:changePassword');
+    $this->get('/item/all', 'App\Controllers\web\ItemController:getSelectItem')->setName('user.item.all');
+    $this->post('/item/add', 'App\Controllers\web\ItemController:setItem')->setName('user.item.add');
 });
 
 $app->group('/guard', function(){
@@ -99,4 +100,5 @@ $app->group('/guard', function(){
     $this->get('/user/{id}/add', 'App\Controllers\web\UserController:getNotUser')->setName('get.user.add');
     $this->post('/user/add', 'App\Controllers\web\UserController:setGuardUser')->setName('post.user.add');
     $this->get('/user/{id}/delete', 'App\Controllers\web\UserController:delGuardUser')->setName('get.user.del');
+
 });

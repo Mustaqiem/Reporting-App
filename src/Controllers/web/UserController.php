@@ -268,12 +268,12 @@ class UserController extends BaseController
             if (password_verify($request->getParam('password'),
                 $login['password'])) {
                 $_SESSION['login'] = $login;
-                if ($_SESSION['login']['status'] == 1) {
+                if ($_SESSION['login']['is_admin'] == 1) {
                     // $this->flash->addMessage('succes', 'Congratulations you have successfully logged in as admin');
                     return $response->withRedirect($this->router
                             ->pathFor('home'));
                 } else {
-                    if (isset($_SESSION['login']['status'])) {
+                    if (isset($_SESSION['login']['is_admin'])) {
                         $this->flash->addMessage('error', 'You are not admin');
                         return $response->withRedirect($this->router
                                 ->pathFor('login.admin'));
@@ -306,12 +306,13 @@ class UserController extends BaseController
         if (empty($login)) {
             $this->flash->addMessage('warning', 'Username is not registered!');
             return $response->withRedirect($this->router
-                    ->pathFor('login'));
+            ->pathFor('login'));
         } else {
             if (password_verify($request->getParam('password'),$login['password'])) {
+
                 $_SESSION['login'] = $login;
                 if ($_SESSION['login']['status'] == 0 &&
-                    $request->getParam('optlogin') == 'user') {
+                $request->getParam('optlogin') == 'user') {
                     $_SESSION['user_group'] = $groups;
 
                     $this->flash->addMessage('succes', 'Successfully logged in as User');
@@ -326,24 +327,14 @@ class UserController extends BaseController
 
                     $this->flash->addMessage('succes', 'Successfully logged in as Guardian');
                     return $response->withRedirect($this->router->pathFor('home'));
-                }
-                elseif (isset($_SESSION['login']['status'])) {
-
-                    if ($_SESSION['login']['status'] == 0) {
-                        // $this->flash->addMessage('succes', 'Succes Login As User');
-                        return $response->withRedirect($this->router
-                        ->pathFor('home'));
-                    } else {
-                        if (isset($_SESSION['login']['status'])) {
-
-                            $this->flash->addMessage('succes', 'You Are Not User');
-                            return $response->withRedirect($this->router->pathFor('login'));
-                        }
-                    }
                 } else {
-                    $this->flash->addMessage('warning', 'Password incorrect!');
+                    $this->flash->addMessage('warning', 'You Are Not User');
                     return $response->withRedirect($this->router->pathFor('login'));
                 }
+
+            } else {
+                $this->flash->addMessage('warning', 'Password incorrect!');
+                return $response->withRedirect($this->router->pathFor('login'));
             }
         }
     }

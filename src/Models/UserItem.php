@@ -153,4 +153,26 @@ class UserItem extends BaseModel
 
         $this->updateData($data, $id);
     }
+
+    public function unselectedItem($userId)
+    {
+        $qb = $this->db->createQueryBuilder();
+
+        $query1 = $qb->select('item_id')
+                     ->from($this->table)
+                     ->where('user_id ='. $userId)
+                     ->execute();
+
+        $qb1 = $this->db->createQueryBuilder();
+
+        $this->query = $qb1->select('it.*')
+             ->from($this->table, 'ui')
+             ->join('ui', $this->jointTable, 'it', $qb1->expr()->notIn('it.id', $query1))
+             ->groupBy('it.id');
+
+            //  $result = $this->query->execute();
+            //  return $result->fetchAll();
+
+            return $this;
+    }
 }
