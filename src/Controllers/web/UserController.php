@@ -76,8 +76,7 @@ class UserController extends BaseController
                 $this->flash->addMessage('warning', 'Email, already used');
                 return $response->withRedirect($this->router->pathFor('user.create'));
             } else {
-                $create = $request->getParams();
-                $user->createUser($create);
+                $user->createUser($request->getParams(), $data['name']);
                 $this->flash->addMessage('succes', 'Create Data Succes');
 
                 return $response->withRedirect($this->router->pathFor('user.list.all'));
