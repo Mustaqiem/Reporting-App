@@ -106,6 +106,7 @@ class UserGroupModel extends BaseModel
 		$this->query = $qb1->select('u.*')
 			 ->from($this->table, 'ug')
 	 		 ->join('ug', 'users', 'u', $qb1->expr()->notIn('u.id', $query1))
+			 ->where('deleted = 0')
 			 ->groupBy('u.id');
 
 		return $this;

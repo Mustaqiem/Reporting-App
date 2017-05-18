@@ -69,7 +69,8 @@ class GuardModel extends BaseModel
 		$this->query = $qb1->select('u.*')
 			 ->from($this->table, 'g')
 	 		 ->join('g', 'users', 'u', $qb1->expr()->notIn('u.id', $query1))
-			 ->where('status != 1')
+			 ->where('u.status != 1')
+			 ->andWhere('u.deleted = 0')
 			 ->andWhere('u.id !='. $guardId)
 			 ->groupBy('u.id');
 
