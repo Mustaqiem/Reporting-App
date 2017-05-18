@@ -47,7 +47,6 @@ class UserModel extends BaseModel
             'name' => $data['name'],
             'email' => $data['email'],
             'username' => $data['username'],
-            'password' => password_hash($data['password'], PASSWORD_BCRYPT),
             'gender' => $data['gender'],
             'address' => $data['address'],
             'phone' => $data['phone'],
@@ -62,7 +61,6 @@ class UserModel extends BaseModel
             'name' => $data['name'],
             'email' => $data['email'],
             'username' => $data['username'],
-            'password' => password_hash($data['password'], PASSWORD_BCRYPT),
             'gender' => $data['gender'],
             'address' => $data['address'],
             'phone' => $data['phone'],
@@ -101,5 +99,15 @@ class UserModel extends BaseModel
 	 	   ->where('id = ' . $id)
 		   ->execute();
 	}
+
+    
+    public function changePassword(array $data, $id)
+    {
+        $dataPassword = [
+            'password' => password_hash($data['new_password'], PASSWORD_BCRYPT),
+         ];
+
+        $this->updateData($dataPassword, $id);
+    }
 
 }

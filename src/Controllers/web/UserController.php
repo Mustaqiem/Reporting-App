@@ -317,23 +317,33 @@ class UserController extends BaseController
                     $this->flash->addMessage('succes', 'Successfully logged in as User');
                     return $response->withRedirect($this->router->pathFor('home'));
                 }
-                 elseif ($_SESSION['login']['status'] == 0 &&
-                    $request->getParam('optlogin') == 'guard') {
+                elseif ($_SESSION['login']['status'] == 0 &&
+                $request->getParam('optlogin') == 'guard') {
                     $_SESSION['guard'] = [
-            			'user' => $users,
-            			'status'=> $request->getParam('optlogin'),
-            			];
+                        'user' => $users,
+                        'status'=> $request->getParam('optlogin'),
+                    ];
 
                     $this->flash->addMessage('succes', 'Successfully logged in as Guardian');
                     return $response->withRedirect($this->router->pathFor('home'));
                 }
-                 elseif (isset($_SESSION['login']['status'])) {
-                        $this->flash->addMessage('succes', 'You Are Not User');
-                        return $response->withRedirect($this->router->pathFor('login'));
+                elseif (isset($_SESSION['login']['status'])) {
+
+                    if ($_SESSION['login']['status'] == 0) {
+                        // $this->flash->addMessage('succes', 'Succes Login As User');
+                        return $response->withRedirect($this->router
+                        ->pathFor('home'));
+                    } else {
+                        if (isset($_SESSION['login']['status'])) {
+
+                            $this->flash->addMessage('succes', 'You Are Not User');
+                            return $response->withRedirect($this->router->pathFor('login'));
+                        }
                     }
-            } else {
-                $this->flash->addMessage('warning', 'Password incorrect!');
-                return $response->withRedirect($this->router->pathFor('login'));
+                } else {
+                    $this->flash->addMessage('warning', 'Password incorrect!');
+                    return $response->withRedirect($this->router->pathFor('login'));
+                }
             }
         }
     }
@@ -409,6 +419,7 @@ class UserController extends BaseController
 
             return $response->withRedirect($this->router->pathFor('user.setting'));
         } else {
+
             $_SESSION['old'] = $request->getParams();
             $_SESSION['errors'] = $this->validator->errors();
 
@@ -581,5 +592,53 @@ class UserController extends BaseController
 
         return $response->withRedirect($this->router
                         ->pathFor('user.item.group', ['id' =>$groupId]));
+    }
+
+    public function getChangePassword($request, $response)
+    {
+        return  $this->view->render($response, '/users/change.twig');
+    }
+
+    public function changePassword($request, $response, $args)
+    {
+        $user = new UserModel($this->db);
+        $this->validator
+            ->rule('required', 'password')
+            ->message('{field} must not be empty');
+        $this->validator
+             ->rule('lengthMax', [
+                'password'
+             ], 30);
+        $this->validator
+             ->rule('equals', 'new_password', 'retype_password');
+        $this->validator
+             ->rule('lengthMin', [
+                'password'
+             ], 5);
+
+            // var_dump($_SESSION['login']);die();
+        if ($this->validator->validate()) {
+            // $login = $user->find('id', $request->getParams()['id']);
+            // $_SESSION['login'];
+            // $checkPassword = $user->find('password', $request->getParams())
+            if (password_verify($request->getParam('password'), $_SESSION['login']['password'])) {
+
+            $user->changePassword($request->getParams(), $_SESSION['login']['id']);
+            return $response->withRedirect($this->router->pathFor('user.setting'));
+            } else {
+
+                    $this->flash->addMessage('warning', 'salah lu');
+            return $response->withRedirect($this->router->pathFor('user.change.password'));
+
+            }
+
+        } else {
+            // var_dump($request->getParams());die();
+
+            $_SESSION['old'] = $request->getParams();
+            $_SESSION['errors'] = $this->validator->errors();
+            // var_dump($_SESSION['errors']); die();
+            return $response->withRedirect($this->router->pathFor('user.change.password', ['id' => $args['id']]));
+        }
     }
 }
