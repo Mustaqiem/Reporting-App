@@ -57,16 +57,6 @@ class UserGroupModel extends BaseModel
 		   ->execute();
 	}
 
-	//Set user in group as guardian
-	public function setGuardian($id)
-	{
-		$qb = $this->db->createQueryBuilder();
-		$qb->update($this->table)
-		   ->set('status', 2)
-	 	   ->where('id = ' . $id)
-		   ->execute();
-	}
-
 	//Set user in group as member
 	public function setUser($id)
 	{

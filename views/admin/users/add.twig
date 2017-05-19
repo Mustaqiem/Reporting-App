@@ -78,8 +78,10 @@
 
                                 <select name="gender" class="form-control" id="">
                                     <option value="">Select Gender</option>
-                                    <option value="L">Laki-Laki</option>
-                                    <option value="P">Perempuan</option>
+                                    <option value="L"{% if  old.gender == "L" %}
+                                     selected="selected"{% endif %}>Laki-Laki</option>
+                                    <option value="P"{% if  old.gender == "P" %}
+                                     selected="selected"{% endif %}>Perempuan</option>
                                 </select>
                             </div>
                             {% if errors.gender %}

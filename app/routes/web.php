@@ -82,7 +82,13 @@ $app->group('/admin', function() use ($app, $container) {
         $this->get('/restore/{id}', 'App\Controllers\web\ItemController:restoreItem')->setName('item.restore');
         $this->get('/trash', 'App\Controllers\web\ItemController:getTrash')->setName('item.trash');
     });
+});
 
+$app->group('/pic', function(){
+    $this->get('/detail/{id}', 'App\Controllers\web\GroupController:findGroup')->setName('pic.group.detail');
+    $this->get('/{id}/users', 'App\Controllers\web\GroupController:getMemberGroup')->setName('pic.user.group.get');
+    $this->get('/{id}/allusers', 'App\Controllers\web\GroupController:getNotMember')->setName('pic.all.users.get');
+    $this->post('/allusers', 'App\Controllers\web\GroupController:setMemberGroup')->setName('pic.member.group.set');
 });
 
 $app->group('/user', function(){

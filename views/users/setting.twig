@@ -46,8 +46,10 @@
                                 <i class="fa fa-transgender-alt"></i>
                             </div>
                             <select name="gender" class="form-control" id="">
-                                <option value="L" {% if  login.gender == "L" %} selected="selected"{% endif %}>Laki-Laki</option>
-                                <option value="P" {% if  login.gender == "P" %} selected="selected"{% endif %}>Perempuan</option>
+                                <option value="L" {% if  login.gender == "L" %}
+                                 selected="selected"{% endif %}>Laki-Laki</option>
+                                <option value="P" {% if  login.gender == "P" %}
+                                 selected="selected"{% endif %}>Perempuan</option>
                             </select>
                         </div>
                         {% if errors.gender %}

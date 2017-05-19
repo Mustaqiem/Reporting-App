@@ -65,7 +65,8 @@ class UserItem extends BaseModel
             ':group_id' => $groupId
         ];
 
-        $this->query = $qb->select('it.name', 'it.description', 'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
+        $this->query = $qb->select('it.name', 'it.description', 'it.recurrent',
+                                    'it.start_date', 'it.end_date', 'it.status')
         ->from($this->jointTable, 'it')
         ->join('it', $this->table, 'ui', 'ui.item_id = it.id')
         ->where('ui.user_id = :user_id')
@@ -79,7 +80,8 @@ class UserItem extends BaseModel
     {
         $qb = $this->db->createQueryBuilder();
 
-        $this->query = $qb->select('it.name', 'it.description', 'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
+        $this->query = $qb->select('it.name', 'it.description', 'it.recurrent',
+                                'it.start_date', 'it.end_date', 'it.status')
         ->from($this->jointTable, 'it')
         ->join('it', $this->table, 'ui', 'ui.item_id = it.id')
         ->where('ui.user_id = :user_id')
@@ -97,7 +99,8 @@ class UserItem extends BaseModel
             ':group_id' => $groupId
         ];
 
-     $qb->select('it.name', 'ui.id', 'ui.reported_at', 'it.description', 'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
+     $qb->select('it.name', 'ui.id', 'ui.reported_at', 'it.description',
+            'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
         ->from($this->jointTable, 'it')
         ->join('it', $this->table, 'ui', 'ui.item_id = it.id')
         ->where('ui.user_id = :user_id')
@@ -119,7 +122,8 @@ class UserItem extends BaseModel
             ':group_id' => $groupId
         ];
 
-     $qb->select('it.name', 'ui.id', 'ui.reported_at', 'it.description', 'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
+     $qb->select('it.name', 'ui.id', 'ui.reported_at', 'it.description',
+            'it.recurrent', 'it.start_date', 'it.end_date', 'it.status')
         ->from($this->jointTable, 'it')
         ->join('it', $this->table, 'ui', 'ui.item_id = it.id')
         ->where('ui.user_id = :user_id')
@@ -169,9 +173,6 @@ class UserItem extends BaseModel
              ->from($this->table, 'ui')
              ->join('ui', $this->jointTable, 'it', $qb1->expr()->notIn('it.id', $query1))
              ->groupBy('it.id');
-
-            //  $result = $this->query->execute();
-            //  return $result->fetchAll();
 
             return $this;
     }
