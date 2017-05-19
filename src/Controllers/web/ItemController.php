@@ -150,7 +150,7 @@ class ItemController extends BaseController
         $deleteItem = $item->hardDelete($args['id']);
         $this->flash->addMessage('succes', 'Item deleted');
 
-        return $response->withRedirect($this->router->pathFor('index'));
+        return $response->withRedirect($this->router->pathFor('item.trash'));
     }
 
     public function softDeleteItem(Request $request, Response $response, $args)
@@ -159,7 +159,7 @@ class ItemController extends BaseController
         $deleteItem = $item->softDelete($args['id']);
         $this->flash->addMessage('succes', 'Item deleted');
 
-        return $response->withRedirect($this->router->pathFor('index'));
+        return $response->withRedirect($this->router->pathFor('item.list'));
     }
 
     public function restoreItem(Request $request, Response $response, $args)

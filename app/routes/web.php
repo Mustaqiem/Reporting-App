@@ -82,12 +82,14 @@ $app->group('/admin', function() use ($app, $container) {
         $this->get('/restore/{id}', 'App\Controllers\web\ItemController:restoreItem')->setName('item.restore');
         $this->get('/trash', 'App\Controllers\web\ItemController:getTrash')->setName('item.trash');
     });
-});
+})->add(new \App\Middlewares\web\AdminMiddleware($container));
 
 $app->group('/pic', function(){
+    $this->get('/group/{id}/item', 'App\Controllers\web\UserController:getItemInGroup')->setName('pic.item.group');
     $this->get('/detail/{id}', 'App\Controllers\web\GroupController:findGroup')->setName('pic.group.detail');
     $this->get('/{id}/users', 'App\Controllers\web\GroupController:getMemberGroup')->setName('pic.user.group.get');
     $this->get('/{id}/allusers', 'App\Controllers\web\GroupController:getNotMember')->setName('pic.all.users.get');
+    $this->post('/users', 'App\Controllers\web\GroupController:setUserGroup')->setName('pic.user.group.set');
     $this->post('/allusers', 'App\Controllers\web\GroupController:setMemberGroup')->setName('pic.member.group.set');
 });
 
@@ -106,5 +108,4 @@ $app->group('/guard', function(){
     $this->get('/user/{id}/add', 'App\Controllers\web\UserController:getNotUser')->setName('get.user.add');
     $this->post('/user/add', 'App\Controllers\web\UserController:setGuardUser')->setName('post.user.add');
     $this->get('/user/{id}/delete', 'App\Controllers\web\UserController:delGuardUser')->setName('get.user.del');
-
 });

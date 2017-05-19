@@ -421,31 +421,18 @@ class UserController extends BaseController
 
     public function enterGroup($request,$response, $args)
     {
-        $item = new \App\Models\Item($this->db);
-        $userItem = new \App\Models\UserItem($this->db);
+        // $item = new \App\Models\Item($this->db);
+        // $userItem = new \App\Models\UserItem($this->db);
         $userGroup = new \App\Models\UserGroupModel($this->db);
 
         $userId  = $_SESSION['login']['id'];
         $user = $userGroup->findUser('group_id', $args['id'], 'user_id', $userId);
+        
         if ($user['status'] == 1) {
 
-            $group = new \App\Models\GroupModel($this->db);
-    		$userGroup = new \App\Models\UserGroupModel($this->db);
-
-    		$findGroup = $group->find('id', $args['id']);
-    		$finduserGroup = $userGroup->findUsers('group_id', $args['id']);
-    		$countUser = count($finduserGroup);
-
-    		return $this->view->render($response, 'admin/group/detail.twig', [
-    			'group' => $findGroup,
-    			'counts'=> [
-    				'user' => $countUser,
-    			]
-    		]);
+            return $response->withRedirect($this->router
+                            ->pathFor('pic.group.detail', ['id' => $args['id']]));
         } elseif ($user['status'] == 0) {
-            return $this->getItemInGroup($request,$response, $args);
-
-        } elseif ($user['status'] == 2) {
             return $this->getItemInGroup($request,$response, $args);
         }
 
