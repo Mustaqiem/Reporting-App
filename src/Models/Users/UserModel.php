@@ -7,7 +7,8 @@ use App\Models\BaseModel;
 class UserModel extends BaseModel
 {
     protected $table = 'users';
-    protected $column = ['id', 'name', 'email', 'username', 'password', 'gender', 'address', 'phone', 'image', 'updated_at', 'created_at', 'status'];
+    protected $column = ['id', 'name', 'email', 'username', 'password', 'gender',
+                'address', 'phone', 'image', 'updated_at', 'created_at', 'status'];
 
     public function createUser(array $data, $images)
     {
@@ -100,7 +101,7 @@ class UserModel extends BaseModel
 		   ->execute();
 	}
 
-    
+
     public function changePassword(array $data, $id)
     {
         $dataPassword = [

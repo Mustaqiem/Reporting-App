@@ -82,16 +82,23 @@ $app->group('/admin', function() use ($app, $container) {
         $this->get('/restore/{id}', 'App\Controllers\web\ItemController:restoreItem')->setName('item.restore');
         $this->get('/trash', 'App\Controllers\web\ItemController:getTrash')->setName('item.trash');
     });
+});
 
+$app->group('/pic', function(){
+    $this->get('/detail/{id}', 'App\Controllers\web\GroupController:findGroup')->setName('pic.group.detail');
+    $this->get('/{id}/users', 'App\Controllers\web\GroupController:getMemberGroup')->setName('pic.user.group.get');
+    $this->get('/{id}/allusers', 'App\Controllers\web\GroupController:getNotMember')->setName('pic.all.users.get');
+    $this->post('/allusers', 'App\Controllers\web\GroupController:setMemberGroup')->setName('pic.member.group.set');
 });
 
 $app->group('/user', function(){
     $this->get('/group/{id}/item', 'App\Controllers\web\UserController:enterGroup')->setName('user.item.group');
     $this->get('/item/status/{id}', 'App\Controllers\web\UserController:setItemUserStatus')->setName('user.item.status');
     $this->get('/item/reset/{id}', 'App\Controllers\web\UserController:restoreItemUserStatus')->setName('user.item.reset.status');
-
     $this->get('/change/password', 'App\Controllers\web\UserController:getChangePassword')->setName('user.change.password');
     $this->post('/change/password', 'App\Controllers\web\UserController:changePassword');
+    $this->get('/item/all', 'App\Controllers\web\ItemController:getSelectItem')->setName('user.item.all');
+    $this->post('/item/add', 'App\Controllers\web\ItemController:setItem')->setName('user.item.add');
 });
 
 $app->group('/guard', function(){
@@ -99,4 +106,5 @@ $app->group('/guard', function(){
     $this->get('/user/{id}/add', 'App\Controllers\web\UserController:getNotUser')->setName('get.user.add');
     $this->post('/user/add', 'App\Controllers\web\UserController:setGuardUser')->setName('post.user.add');
     $this->get('/user/{id}/delete', 'App\Controllers\web\UserController:delGuardUser')->setName('get.user.del');
+
 });
