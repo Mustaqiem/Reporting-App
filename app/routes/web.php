@@ -109,5 +109,5 @@ $app->group('', function() use ($app, $container) {
         $this->get('/user/{id}/add', 'App\Controllers\web\UserController:getNotUser')->setName('get.user.add');
         $this->post('/user/add', 'App\Controllers\web\UserController:setGuardUser')->setName('post.user.add');
         $this->get('/user/{id}/delete', 'App\Controllers\web\UserController:delGuardUser')->setName('get.user.del');
-    });
-});
+    })->add(new \App\Middlewares\web\GuardMiddleware($container));
+})->add(new \App\Middlewares\web\AuthMiddleware($container));
