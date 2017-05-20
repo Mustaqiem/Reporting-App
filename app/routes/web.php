@@ -108,3 +108,8 @@ $app->group('/guard', function(){
     $this->get('/user/{id}/delete', 'App\Controllers\web\UserController:delGuardUser')->setName('get.user.del');
 
 });
+
+$app->group('/user', function(){
+    $this->get('/item/create', 'App\Controllers\web\ItemController:getCreateItem')->setName('user.item.create');
+    $this->post('/item/create', 'App\Controllers\web\ItemController:postCreateItem')->setName('user.item.create.post');
+});

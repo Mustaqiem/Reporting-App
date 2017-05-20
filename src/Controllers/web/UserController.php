@@ -427,6 +427,7 @@ class UserController extends BaseController
 
         $userId  = $_SESSION['login']['id'];
         $user = $userGroup->findUser('group_id', $args['id'], 'user_id', $userId);
+        $_SESSION['group'] = $user['group_id'];
         if ($user['status'] == 1) {
 
             $group = new \App\Models\GroupModel($this->db);
