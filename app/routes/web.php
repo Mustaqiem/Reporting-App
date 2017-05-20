@@ -1,27 +1,25 @@
 <?php
 
 $app->get('/home', 'App\Controllers\web\HomeController:index')->setName('home');
-$app->get('/login', 'App\Controllers\web\UserController:getLogin')->setName('user.login');
-$app->post('/login', 'App\Controllers\web\UserController:login');
+
 $app->get('/register', 'App\Controllers\web\UserController:getRegister')->setName('register');
 
 $app->post('/register', 'App\Controllers\web\UserController:postRegister');
-
 
 $app->get('/admin', 'App\Controllers\web\UserController:getLoginAsAdmin')->setName('login.admin');
 
 $app->post('/admin', 'App\Controllers\web\UserController:loginAsAdmin');
 
 $app->get('/', 'App\Controllers\web\UserController:getLogin')->setName('login');
+
 $app->post('/', 'App\Controllers\web\UserController:login');
 
 $app->group('', function() use ($app, $container) {
     $app->get('/logout', 'App\Controllers\web\UserController:logout')->setName('logout');
     $app->get('/profile', 'App\Controllers\web\UserController:viewProfile')->setName('user.profile');
-
     $app->get('/setting', 'App\Controllers\web\UserController:getSettingAccount')->setName('user.setting');
     $app->post('/setting', 'App\Controllers\web\UserController:settingAccount');
-
+    
     $app->group('/admin', function() use ($app, $container) {
 
         $app->group('/group', function(){
@@ -102,7 +100,10 @@ $app->group('', function() use ($app, $container) {
         $this->post('/change/password', 'App\Controllers\web\UserController:changePassword');
         $this->get('/item/all', 'App\Controllers\web\ItemController:getSelectItem')->setName('user.item.all');
         $this->post('/item/add', 'App\Controllers\web\ItemController:setItem')->setName('user.item.add');
+        $this->get('/item/create', 'App\Controllers\web\ItemController:getCreateItem')->setName('user.item.create');
+        $this->post('/item/create', 'App\Controllers\web\ItemController:postCreateItem')->setName('user.item.create.post');
     });
+
 
     $app->group('/guard', function(){
         $this->get('/user/{id}/item', 'App\Controllers\web\UserController:getItemUser')->setName('user.item');

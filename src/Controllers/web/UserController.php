@@ -421,13 +421,13 @@ class UserController extends BaseController
 
     public function enterGroup($request,$response, $args)
     {
-        // $item = new \App\Models\Item($this->db);
-        // $userItem = new \App\Models\UserItem($this->db);
         $userGroup = new \App\Models\UserGroupModel($this->db);
 
         $userId  = $_SESSION['login']['id'];
         $user = $userGroup->findUser('group_id', $args['id'], 'user_id', $userId);
-        
+
+        $_SESSION['group'] = $user['group_id'];
+
         if ($user['status'] == 1) {
 
             return $response->withRedirect($this->router
@@ -435,7 +435,6 @@ class UserController extends BaseController
         } elseif ($user['status'] == 0) {
             return $this->getItemInGroup($request,$response, $args);
         }
-
     }
 
     public function getItemInGroup($request,$response, $args)
