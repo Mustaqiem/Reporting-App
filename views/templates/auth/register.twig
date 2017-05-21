@@ -82,12 +82,23 @@
                                             </div>
                                         </div>
                                         <div class="form-group">
-                                        <div class="input-group">
+<!--                                         <div class="input-group">
                                             <label class="radio-inline"><input type="radio" name="optlogin" value="user" checked> User</label>
                                             <label class="radio-inline"><input type="radio" name="optlogin" value="guard"> Guardian</label>
                                             </div>
-                                        </div>
-
+                                        </div> -->
+                                    <label>Who Are You ? &nbsp;</label>
+                                    <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-default radio-inline">
+                                                    <input type="radio"  name="optlogin" value="user" checked>User
+                                                </label></div> 
+                                                <b>or</b>
+                                    <div class="btn-group" data-toggle="buttons">
+                                                <label class="btn btn-default radio-inline">
+                                                    <input type="radio"  name="optlogin" value="guard">Guardian
+                                                </label>
+                                        </div> 
+                                    </div>
                                         <button type="submit" class="btn btn-social-button btn-yahoo"><i class="fa fa-login"></i>Sign in!</button>
                                     </form>
                                 </div>
@@ -186,8 +197,10 @@
                                             </div>
                                      <select name="gender" class="form-control" id="">
                                         <option value="">Select Gender</option>
-                                        <option value="Laki-Laki">Laki-Laki</option>
-                                        <option value="Perempuan">Perempuan</option>
+                                        <option value="Laki-laki" {% if  old.gender == 'Laki-laki' %}
+                                         selected="selected"{% endif %}>Laki-Laki</option>
+                                        <option value="Perempuan" {% if  old.gender == 'Perempuan' %}
+                                         selected="selected"{% endif %}>Perempuan</option>
                                     </select>
                                         </div>
                                     </div>
@@ -197,7 +210,7 @@
                                             <div class="input-group-addon">
                                                 <i class="fa fa-phone"></i>
                                             </div>
-                                         <input type="text" class="form-control input-medium bfh-phone" data-format="+62 (ddd) ddd-ddd-ddd" name="phone" value="{{old.phone}}" placeholder=" Phone Number...">
+                                         <input type="text" class="form-control input-medium bfh-phone" data-format="+62 ddd ddd-ddd-ddd" name="phone" value="{{old.phone}}" placeholder=" Phone Number...">
                                         </div>
                                     {% if errors.phone %}
                                         <span class="help-block">
@@ -218,7 +231,6 @@
 
     </div>
 
-
 <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!-- Include a polyfill for ES6 Promises (optional) for IE11 and Android browser -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/core-js/2.4.1/core.js"></script>
@@ -230,6 +242,7 @@
 
 <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-formhelpers/2.3.0/js/bootstrap-formhelpers.min.js"></script>
+
 </body>
 </html>
 {% endblock %}
